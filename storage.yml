@@ -1,0 +1,41 @@
+- hosts: all
+  tasks:
+    - name: Identify disks that are 10 GB for web_vg
+      set_fact:
+        web_vg_disks: "{{ ansible_devices | dict2items | selectattr('key', 'match', '^sd.*') | rejectattr('key', 'match', '^sda$') | selectattr('value.size', 'match', '^10.00 GB') | map(attribute='key') | list }}"
+
+    - name: Identify disks that are 15 GB for database_vg
+      set_fact:
+        database_vg_disks: "{{ ansible_devices | dict2items | selectattr('key', 'match', '^sd.*') | rejectattr('key', 'match', '^sda$') | selectattr('value.size', 'match', '^15.00 GB') | map(attribute='key') | list }}"
+
+    - name: Show value of web_vg_disks
+      ansible.builtin.debug:
+        var: web_vg_disks
+
+    - name: Show value of database_vg_disks
+      ansible.builtin.debug:
+        var: database_vg_disks
+
+    - name: Run storage role
+      vars:
+        storage_pools:
+          - name: web_vg
+            disks: "{{ web_vg_disks }}"
+            volumes:
+              - name: web_lv
+                size: 100%
+                mount_point: "/web"
+                state: present
+          - name: database_vg
+            disks: "{{ database_vg_disks }}"
+            volumes:
+              - name: database_lv
+                size: 50%
+                mount_point: "/database"
+                state: present
+              - name: backup_lv
+                size: 20%
+                mount_point: "/backup"
+                state: present
+      ansible.builtin.include_role:
+        name: redhat.rhel_system_roles.storage
