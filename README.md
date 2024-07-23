@@ -1,5 +1,6 @@
 # Automating storage management with RHEL System Roles
 [https://www.redhat.com/en/blog/automating-storage-management-rhel-system-roles](https://www.redhat.com/en/blog/automating-storage-management-rhel-system-roles)
+
 This demo is a RHEL 9 update of a previously posted blog on redhat.com.
 
 - Learn how the storage system role can automate the configuration of logical volume manager (LVM) volume groups, logical volumes, and filesystems.
