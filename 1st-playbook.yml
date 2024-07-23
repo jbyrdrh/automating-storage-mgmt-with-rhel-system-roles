@@ -1,0 +1,23 @@
+- hosts: all
+  tasks:
+    - name: Identify disks that are 10 GB for web_vg
+      set_fact:
+        web_vg_disks: "{{ ansible_devices | dict2items | selectattr('key', 'match', '^sd.*') | rejectattr('key', 'match', '^sda$') | selectattr('value.size', 'match', '^10.00 GB') | map(attribute='key') | list }}"
+
+    - name: Identify disks that are 15 GB for database_vg
+      set_fact:
+        database_vg_disks: "{{ ansible_devices | dict2items | selectattr('key', 'match', '^sd.*') | rejectattr('key', 'match', '^sda$') | selectattr('value.size', 'match', '^15.00 GB') | map(attribute='key') | list }}"
+
+    - name: Show value of web_vg_disks
+      ansible.builtin.debug:
+        var: web_vg_disks
+
+    - name: Show value of database_vg_disks
+      ansible.builtin.debug:
+        var: database_vg_disks
+
+#The first task identifies ansible_devices that start with the device name vd (excluding vda), and identifies the disks that are 10GB in size. These identified disks are assigned to the web_vg_disks list variable
+
+#The second task works in the same way, identifying 15GB disks for the database_vg volume group and stores the list of identified disks in the database_vg_disks variable
+
+#The third and forth tasks display the contents of the web_vg_disks and database_vg_disks variables
