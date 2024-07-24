@@ -31,7 +31,7 @@ These servers have the following storage devices:
 
 As you can see, each server has two 10GB disks and two 15 GB disks, however the device names of these storage devices are not consistent between the servers.
 
-NOTE: Path-based addresses (e.g. `/dev/sdX`) are [not persistent per kernel design](https://access.redhat.com/solutions/3962551#root_cause), so I did have to work with the disk layout on rhel9-server1 which involved a few reboots for the kernel to discover the disks in the desired order, specifically `sdb` and `sdf`.
+NOTE: Path-based addresses (e.g. `/dev/sdX`) are [not persistent per kernel design](https://access.redhat.com/solutions/3962551#root_cause), so I did have to work with the disk layout on `rhel9-server1` which involved a few reboots for the kernel to discover the disks in the desired order, specifically `sdb` and `sdf`.
 
 In this example, I would like to setup the following new volume groups, logical volumes, and filesystems:
 
